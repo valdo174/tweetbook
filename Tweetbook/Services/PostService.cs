@@ -1,61 +1,59 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Tweetbook.Data;
 using Tweetbook.Domain;
 
 namespace Tweetbook.Services
 {
 	public class PostService : IPostService
 	{
-		private List<Post> _posts;
+		private readonly DataContext _dataContext;
 
-		public PostService()
+		public PostService(DataContext dataContext)
 		{
-			_posts = new List<Post>();
-
-			for (var i = 0; i < 5; i++)
-			{
-				_posts.Add(new Post
-				{
-					Id = Guid.NewGuid(),
-					Name = $"Post Name {i}"
-				});
-			}
+			_dataContext = dataContext;
 		}
 
-		public Post GetPostById(Guid Id)
+		public async Task<Post> GetPostByIdAsync(Guid Id)
 		{
-			return _posts.SingleOrDefault(x => x.Id == Id);
+			return await _dataContext.Posts.SingleOrDefaultAsync(x => x.Id == Id);
 		}
 
-		public List<Post> GetAllPosts()
+		public async Task<List<Post>> GetAllPostsAsync()
 		{
-			return _posts;
+			return await _dataContext.Posts.ToListAsync();
 		}
 
-		public bool UpdatePost(Post postToUpdate)
+		public async Task<bool> UpdatePostAsync(Post postToUpdate)
 		{
-			var exists = GetPostById(postToUpdate.Id) != null;
+			_dataContext.Posts.Update(postToUpdate);
 
-			if (!exists)
-				return false;
+			var updated = await _dataContext.SaveChangesAsync();
 
-			var index = _posts.FindIndex(x => x.Id == postToUpdate.Id);
-			_posts[index] = postToUpdate;
-
-			return true;
+			return updated > 0;
 		}
 
-		public bool DeletePost(Guid postId)
+		public async Task<bool> DeletePostAsync(Guid postId)
 		{
-			var post = GetPostById(postId);
+			var post = await GetPostByIdAsync(postId);
 
-			if (post == null)
-				return false;
+			_dataContext.Posts.Remove(post);
 
-			_posts.Remove(post);
+			var deleted = await _dataContext.SaveChangesAsync();
 
-			return true;
+			return deleted > 0;
+		}
+
+		public async Task<bool> CreatePostAsync(Post post)
+		{
+			await _dataContext.Posts.AddAsync(post);
+
+			var created = await _dataContext.SaveChangesAsync();
+
+			return created > 0;
 		}
 	}
 }
