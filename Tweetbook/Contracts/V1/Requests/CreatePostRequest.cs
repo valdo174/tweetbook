@@ -1,7 +1,9 @@
-﻿namespace Tweetbook.Contracts.V1.Requests
+﻿using System;
+
+namespace Tweetbook.Contracts.V1.Requests
 {
 	public class CreatePostRequest
 	{
-		public string Id { get; set; }
+		public Guid Id { get; set; }
 	}
 }
