@@ -25,7 +25,7 @@ namespace Tweetbook.Services
 
 		public async Task<AuthenticationResult> RegisterAsync(string email, string password)
 		{
-			var existingUser = _userManager.FindByEmailAsync(email);
+			var existingUser = await _userManager.FindByEmailAsync(email);
 
 			if (existingUser != null)
 			{
