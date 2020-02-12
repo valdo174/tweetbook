@@ -48,7 +48,7 @@ namespace Tweetbook.Installers
 				x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 				{
 					Description = "JWT Authorization header using the bearer scheme",
-					Name = "Authorixation",
+					Name = "Authorization",
 					In = ParameterLocation.Header,
 					Type = SecuritySchemeType.ApiKey
 				});
