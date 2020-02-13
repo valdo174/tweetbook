@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Tweetbook.Data;
 using Tweetbook.Domain;
@@ -57,6 +56,19 @@ namespace Tweetbook.Services
 			var created = await _dataContext.SaveChangesAsync();
 
 			return created > 0;
+		}
+
+		public async Task<bool> UserPostOwnsAsync(Guid postId, string userId)
+		{
+			var post = await _dataContext.Posts.AsNoTracking().SingleOrDefaultAsync(x => x.Id == postId);
+
+			if (post == null)
+				return false;
+
+			if (post.UserId == userId)
+				return false;
+
+			return true;
 		}
 	}
 }
