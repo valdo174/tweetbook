@@ -55,7 +55,14 @@ namespace Tweetbook.Installers
 
 				x.AddSecurityRequirement(new OpenApiSecurityRequirement
 				{
-					{ new OpenApiSecurityScheme { Name = "Bearer" }, new string[0] }
+					{
+						new OpenApiSecurityScheme
+						{
+							Reference = new OpenApiReference {
+								Type = ReferenceType.SecurityScheme,
+								Id = "Bearer" }
+						}, new List<string>()
+					}
 				});
 			});
 		}
