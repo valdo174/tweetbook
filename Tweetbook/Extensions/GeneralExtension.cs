@@ -15,7 +15,7 @@ namespace Tweetbook.Extensions
 				return string.Empty;
 			}
 
-			return context.User.Claims.Single(x => x.Type == "Id").Value;
+			return context.User.Claims.SingleOrDefault(x => x.Type == "Id")?.Value;
 		}
 	}
 }
