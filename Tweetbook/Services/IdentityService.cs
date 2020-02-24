@@ -211,8 +211,7 @@ namespace Tweetbook.Services
 			return new AuthenticationResult
 			{
 				Success = true,
-				Token = tokenHandler.WriteToken(token),
-				RefreshToken = refreshToken.Token
+				Token = tokenHandler.WriteToken(token)
 			};
 		}
 	}
