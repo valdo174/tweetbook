@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Tweetbook.Extensions
 {
@@ -15,7 +12,8 @@ namespace Tweetbook.Extensions
 				return string.Empty;
 			}
 
-			return context.User.Claims.SingleOrDefault(x => x.Type == "Id")?.Value;
+			return context.User.Claims.Single(
+				x => x.Type.Equals("id", System.StringComparison.InvariantCultureIgnoreCase)).Value;
 		}
 	}
 }

@@ -112,7 +112,7 @@ namespace Tweetbook.Services
 
 			await _dataContext.SaveChangesAsync();
 
-			var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
+			var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type.Equals("id", StringComparison.InvariantCultureIgnoreCase)).Value);
 			return await GenerateAuthenticationResultForUserAsync(user);
 		}
 
@@ -201,8 +201,6 @@ namespace Tweetbook.Services
 				UserId = user.Id,
 				CreationDate = DateTime.UtcNow,
 				ExpiredDate = DateTime.UtcNow.AddMonths(6),
-
-				Token = Guid.NewGuid().ToString()
 			};
 
 			await _dataContext.RefreshTokens.AddAsync(refreshToken);
@@ -211,7 +209,8 @@ namespace Tweetbook.Services
 			return new AuthenticationResult
 			{
 				Success = true,
-				Token = tokenHandler.WriteToken(token)
+				Token = tokenHandler.WriteToken(token),
+				RefreshToken = refreshToken.Token
 			};
 		}
 	}

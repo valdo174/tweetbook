@@ -65,7 +65,7 @@ namespace Tweetbook.Services
 			if (post == null)
 				return false;
 
-			if (post.UserId == userId)
+			if (post.UserId != userId)
 				return false;
 
 			return true;
